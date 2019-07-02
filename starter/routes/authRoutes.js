@@ -15,7 +15,7 @@ module.exports = app => {
       res.redirect('/blogs');
     }
   );
-
+  
   app.get('/auth/logout', (req, res) => {
     req.logout();
     res.redirect('/');
