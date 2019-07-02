@@ -1,6 +1,7 @@
 //clustering
 //nodemon do not work with clustering
 // it means only for every child have on thread not for whole cluster
+// best cluster management system already writed use that = pm2 for production
 process.env.UV_THREADPOOL_SIZE = 1;
 const cluster = require('cluster');
 //cluster manager is responsible for monitoring health of indi instance
@@ -11,6 +12,8 @@ if (cluster.isMaster) {
   //when we call fork node go back and exec index sec time
   // fork make cluster manager to false
   // can define thread pool
+  // fork must equal to cores of cpu
+  cluster.fork();
   cluster.fork();
 
 } else {
