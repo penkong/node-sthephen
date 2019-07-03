@@ -1,26 +1,72 @@
+// redis is not cool with promise
+// redis always save strings and back strings
+// client.flushall() clear redis
 const mongoose = require('mongoose');
+const redis = require('redis');
+// we prefer promise to callback to use async
+const util = require('util');
+const redisUrl = 'redis://127.0.0.1:6379';
+
+const client = redis.createClient(redisUrl);
+// promisify help us bring back promise from func cb
+client.get = util.promisify(client.get);
 
 const { exec } = mongoose.Query.prototype;
 
-mongoose.Query.prototype.exec = function () {
 
-  return exec.apply(this, arguments);
+mongoose.Query.prototype.cache = function () {
+  this.useCache = true;
+  // to make it chain able
+  return this;
+}
+
+// exec bring back for us a mongoose model
+mongoose.Query.prototype.exec = async function () {
+  // we dont cache big files  all logic bot is for small files.
+  if (!this.useCache) {
+    return exec.apply(this, arguments);
+  }
+
+
+  
+  // make key for redis from id and name of collection
+  const key = JSON.stringify(Object.assign({}, this.getQuery(), {
+    collection: this.mongooseCollection.name
+  }));
+
+  // see if we have key in redis
+  const cachedVal = await client.get(key);
+  if (cachedVal) {
+    // mongoose need take back a model from mongo db
+    // reference to model that represent query;
+    // cl this.
+    // bring us arr.
+    // need to change doc to model instance
+    // const doc = new this.model(JSON.parse(cachedVal));
+    const doc = JSON.parse(cachedVal);
+    return Array.isArray(doc) 
+      ? doc.map(d => new this.model(d))
+      : new this.model(doc);
+  }
+
+  const result = await exec.apply(this, arguments);
+  client.set(key, JSON.stringify(result));
+  return result;
 }
 
 
-// // redis is not cool with promise
-//     // redis always save strings and back strings
-//     // client.flushall() clear redis
 
-//     const redis = require('redis');
-//     const redisUrl = 'redis://127.0.0.1:6379';
-//     const client = redis.createClient(redisUrl);
 
-//     // we prefer promise to callback
+
+
+
+
+
+
+//     
 //     const util = require('util');
 
-//     // promisify help us bring back promise from func
-//     client.get = util.promisify(client.get);
+//     
 
 //     // that promise ify help us use await.
 //     const cachedBlogs = await client.get(req.user.id);
