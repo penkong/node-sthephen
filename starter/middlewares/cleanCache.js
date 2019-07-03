@@ -9,3 +9,5 @@ module.exports = async (req,res,next) => {
 
   clearHash(req.user.id);
 }
+
+// npm puppeter is related to chromium
