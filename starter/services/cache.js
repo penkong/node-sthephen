@@ -60,7 +60,7 @@ mongoose.Query.prototype.exec = async function () {
 
 }
 
-// delete r of nested cache
+// deleter of nested cache
 module.exports = {
   // for use it make it middleware
   clearHash(hashKey) {

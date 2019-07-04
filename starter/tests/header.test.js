@@ -59,5 +59,3 @@ test('when signed in show logout button', async () => {
 })
 
 
-
-

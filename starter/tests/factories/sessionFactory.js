@@ -16,7 +16,7 @@ module.exports = user => {
   const session = Buffer
     .from(JSON.stringify(sessionObject))
     .toString('base64');
-
+  // sig is signing cookie key and stable for security and check it with
   const sig = keygrip.sign('session=' + session);
   return { session, sig };
 }
