@@ -8,7 +8,8 @@ const User = mongoose.model('User');
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-
+// Cookie-session => req.session => passport => req.user
+// cookie base 64 + cookie signing key = session.signature( keygrip npm)
 passport.deserializeUser((id, done) => {
   User.findById(id).then(user => {
     done(null, user);

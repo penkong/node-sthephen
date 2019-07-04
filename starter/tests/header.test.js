@@ -39,6 +39,25 @@ test('should clicking login to auth flow', async () => {
   // we use fake session and deceive cookie session believe it
 });
 
+test('when signed in show logout button', () => {
+  const id = '5453rsff4tjdsfjsdf4fs';
+  const Buffer = require('safe-buffer').Buffer;
+  const sessionObject = {
+    passport: {
+      usr: id
+    }
+  };
+  // buffer session obj to string ddsgdfgerhgty56y54yu657uy65y-fdsg43ygg43tg34tgy-4yt3465346t34t34
+  const sessionString = Buffer
+    .from(JSON.stringify(sessionObject))
+    .toString('base64');
+  //key grip to generate signature;
+  const Keygrip = require('keygrip');
+  const keys = require('../config/keys');
+  const keygrip = new Keygrip([keys.cookieKey]);
+  const sig = keygrip.sign('session=' + sessionString);
+})
+
 
 
 
