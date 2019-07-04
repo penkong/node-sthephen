@@ -41,7 +41,7 @@ class CustomPage {
     await this.page.setCookie({name: 'session', value: session});
     await this.page.setCookie({name: 'session.sig', value: sig});
     //after set cookie we refresh page for change happen
-    await this.page.goto('localhost:3000');
+    await this.page.goto('localhost:3000/blogs');
 
     // it cause let all up lines exec then exec below
     await this.page.waitFor('a[href="/auth/logout"]');
