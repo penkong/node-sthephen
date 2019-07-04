@@ -23,6 +23,31 @@ describe('when logged in', async () => {
     expect(label).toEqual('Blog Title');
   });
 
+  describe('and using valid inputs', async () => {
+    beforeEach(async () => {
+      await page.type('.title input', 'my title');
+      await page.type('.content input', 'my content');
+      await page.click('form button');
+    });
+
+    test('should submiting takes user to review screen', async () => {
+      const text = await page.getContentsOf('h5');
+      expect(text).toEqual('Please confirm your entries');
+    });
+
+    test('should submiting then saving blog to index page', async () => {
+      await page.click('button.green');
+      // must wait after ajax req
+      await page.waitFor('.card');
+      const title = await page.getContentsOf('.card-title');
+      const content = await page.getContentsOf('p');
+      expect(title).toEqual('My title');
+      expect(content).toEqual('My Content');
+      
+    });
+    
+  })
+  
   describe('And using invalid inputs', async () => {
     beforeEach( async () => {
       await page.click('form button');
@@ -37,6 +62,9 @@ describe('when logged in', async () => {
   
 });
 
+describe('when not logged in', async () => {
+  
+})
 
 
 
