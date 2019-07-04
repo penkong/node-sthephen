@@ -10,7 +10,7 @@ const userFactory = require('../factories/userFactory');
     //)
 
 class CustomPage {
-  
+
   static async build() {
     const browser = await puppeteer.launch({
       headless: false
@@ -46,6 +46,10 @@ class CustomPage {
     // it cause let all up lines exec then exec below
     await this.page.waitFor('a[href="/auth/logout"]');
 
+  }
+
+  async getContentsOf(selector) {
+    return this.page.$eval(selector, el => el.innerHTML);
   }
 }
 
