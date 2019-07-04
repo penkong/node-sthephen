@@ -3,6 +3,7 @@
 // pupet => browser => tab(page);
 const puppeteer = require('puppeteer');
 const sessionFactory = require('./factories/sessionFactory');
+const userFactory = require('./factories/userFactory');
 
 
 
@@ -40,10 +41,10 @@ test('should clicking login to auth flow', async () => {
 });
 
 //test.only
-test('when signed in show logout button', () => {
+test('when signed in show logout button', async () => {
 
-
-  const { session, sig } = sessionFactory();
+  const user = await userFactory();
+  const { session, sig } = sessionFactory(user);
 
   await page.setCookie({name: 'session', value: session});
   await page.setCookie({name: 'session.sig', value: sig});
