@@ -17,6 +17,10 @@ mongoose.connect(keys.mongoURI, { useMongoClient: true });
 const app = express();
 
 app.use(bodyParser.json());
+// cookie session parse that session props and assign it to req.session
+// session.sig is for security purpose nobody can not change session
+// Buffer.from().toString()
+// then req.session go to passport => see user id => search on db
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,

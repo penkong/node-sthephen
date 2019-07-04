@@ -23,6 +23,7 @@ module.exports = app => {
   });
 
   app.post('/api/blogs', requireLogin, cleanCache, async (req, res) => {
+    // cookie session give us info on req.session
     const { title, content } = req.body;
 
     const blog = new Blog({
