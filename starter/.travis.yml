@@ -1,0 +1,36 @@
+# first say what language we use
+language: node_js
+# what version - array
+node_js:
+  - "11.7"
+# now define dist use as base image for vm of ci
+# trusty is specific version of linux
+dist: trusty
+# now define services we require for our
+# like db or outside modules
+services:
+  - mongodb
+  - redis-server
+# env var when run on ci server
+env:
+  - NODE_ENV=ci
+# let travis server know to cache node modules to increase speed for next time
+cache:
+  directories:
+    - node_modules
+    - client/node_modules
+# couple of commands we want to executed at cl
+# to get our project ready
+install:
+  - npm install
+# specific to this project
+  - npm run build
+# similar to i start server and exec tests
+# & run this command on sub shell(background) = let us still use command line cool
+#  then server killed with pkill node
+# nohup no hang up dont care about shell closed or tied keep process running
+# must give server delay to dont run so soon tiny pause for req
+script:
+  - nohup npm run start &
+  - sleep 3
+  - npm run test
