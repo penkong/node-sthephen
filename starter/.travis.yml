@@ -14,6 +14,7 @@ services:
 # env var when run on ci server
 env:
   - NODE_ENV=ci
+  - PORT=3000
 # let travis server know to cache node modules to increase speed for next time
 cache:
   directories:
@@ -34,3 +35,4 @@ script:
   - nohup npm run start &
   - sleep 3
   - npm run test
+# must connect mongodb and redis to our CI machine => url and port

@@ -5,9 +5,10 @@ const mongoose = require('mongoose');
 const redis = require('redis');
 // we prefer promise to callback to use async
 const util = require('util');
-const redisUrl = 'redis://127.0.0.1:6379';
+const keys = require('../config/keys');
 
-const client = redis.createClient(redisUrl);
+
+const client = redis.createClient(keys.redisUrl);
 // promisify help us bring back promise from func cb
 client.hget = util.promisify(client.hget);
 
