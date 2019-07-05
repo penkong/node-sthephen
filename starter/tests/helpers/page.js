@@ -51,6 +51,43 @@ class CustomPage {
   async getContentsOf(selector) {
     return this.page.$eval(selector, el => el.innerHTML);
   }
+
+  get(path) {
+    return this.page.evaluate( _path =>{ 
+      return fetch( _path , {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json()); 
+    }, path);
+  }
+
+  post(path, data) {
+    return this.page.evaluate((_path, _data)=>{ 
+      // puppeteer make whole of it to string and send it to chromium
+      return fetch( _path, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(_data)
+      }, path, data).then(res => res.json()); 
+      // convert raw data to json
+    });
+  }
+
+  execRequests(actions) {
+    // it make all promises single promise
+    return Promise.all(
+      actions.map(({method, path, data}) => {
+        return this[method] (path, data);
+      })
+    );
+  }
+
 }
 
 module.exports = CustomPage;
