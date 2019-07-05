@@ -64,7 +64,36 @@ describe('when logged in', async () => {
 
 describe('when not logged in', async () => {
   
-})
+  test('user can not create a blog post', async () => {
+    const result = await page.evaluate(()=>{ 
+      //puppeteer make whole of it to string and send it to chromium
+      return fetch('/api/blogs', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({title: 'My Title', content: 'My Content'})
+      }).then(res => res.json()); // convert raw data to json
+    });
+    expect(result).toEqual({error: 'You must log in!'});
+  });
+
+  test('user can not get a list of post', async () => {
+    
+    const result = await page.evaluate(()=>{ 
+      return fetch('/api/blogs', {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json()); 
+    });
+    expect(result).toEqual({error: 'You must log in!'});
+  });
+  
+});
 
 
 
