@@ -1,5 +1,6 @@
 // we adjust test time out because of conveluted and time consuming actions
-jest.setTimeOut(30000);
+// jest.setTimeOut(30000);
+jasmine.DEFAULT_TIMEOUT_INTERVAL=30000;
 
 require('../models/User');
 
